@@ -1,0 +1,6 @@
+# we dont need these in the dockerfile
+venv/
+.git
+.gitignore
+
+
