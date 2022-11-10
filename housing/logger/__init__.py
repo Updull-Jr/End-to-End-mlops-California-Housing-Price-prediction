@@ -14,7 +14,7 @@ os.makedirs(LOG_DIR, exist_ok = True)  #CREATES THE DIRECTORY
 LOG_FILE_PATH = os.path.join(LOG_DIR, LOG_FILE_NAME)
 
 logging.basicConfig(filename=LOG_FILE_PATH,
-  filemode='w', #write
+  filemode='w', #write ~ the mode to open the file
   format ='[%(asctime)s] %(name)s - %(levelname)s - %(message)s', 
-  level = logging.INFO
+  level = logging.INFO #set the root logger
   )
