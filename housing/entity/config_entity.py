@@ -1,4 +1,5 @@
-  # the information we need to provide to the our ml pipeline
+  # the information we need to provide to our ml pipeline
+   #inputs for the components
 
 from collections import namedtuple
 
