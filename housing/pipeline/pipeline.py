@@ -7,7 +7,7 @@ from housing.component.data_ingestion import DataIngestion
 import os,sys
 
 
-class pipeline:
+class Pipeline:
 
     def __init__(self, config: Configuration = Configuration()) -> None:
         try:
@@ -25,6 +25,22 @@ class pipeline:
 
         except Exception as e:
             raise HousingException(e,sys) from e
+
+
+    def start_data_validation(self):
+        pass
+
+    def start_data_transformation(self):
+        pass
+
+    def start_model_trainer(self):
+        pass
+
+    def start_model_evaluation(self):
+        pass
+
+    def start_model_pusher(self):
+        pass
 
     
     def run_pipeline(self):

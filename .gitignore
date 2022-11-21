@@ -34,6 +34,8 @@ __pycache__/
 
 # C extensions
 *.so
+housing/artifact
+
 
 # Distribution / packaging
 .Python
@@ -48,7 +50,7 @@ lib64/
 parts/
 sdist/
 var/
-wheels/
+wheels/ 
 pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
@@ -92,6 +94,9 @@ coverage.xml
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+logs
+housing_logs
+
 
 # Flask stuff:
 instance/
