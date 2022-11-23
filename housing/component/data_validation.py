@@ -1,10 +1,10 @@
-   #the 
+
 from housing.logger import logging
 from housing.exception import HousingException
 from housing.entity.config_entity import DataValidationConfig
 from housing.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact
-import os,sys
-import pandas as pd 
+import sys, os
+import pandas as pd
 from evidently.model_profile import Profile
 from evidently.model_profile.sections import DataDriftProfileSection
 from evidently.dashboard import Dashboard
@@ -28,19 +28,23 @@ class DataValidation:
         try:
             train_df = pd.read_csv(self.data_ingestion_artifact.train_file_path)
             test_df = pd.read_csv(self.data_ingestion_artifact.test_file_path)
-
+            return train_df, test_df
         except Exception as e:
             raise HousingException(e,sys) from e
 
 
-    def is_train_test_file_exists(self):
+    def is_train_test_file_exists(self)->bool:
         try:
+
             logging.info("checking if training and test fike exists")
             is_train_file_exist = False
             is_test_file_exist = False
 
-            train_file_path = os.path.exists(train_file_path)
-            test_file_path = os.path.exists(test_file_path)
+            train_file_path = self.data_ingestion_artifact.train_file_path
+            test_file_path = self.data_ingestion_artifact.test_file_path
+
+            is_train_file_exist = os.path.exists(train_file_path)
+            is_test_file_exist = os.path.exists(test_file_path)
 
             is_available = is_train_file_exist and is_test_file_exist
 
@@ -53,11 +57,11 @@ class DataValidation:
                 message=f"Training file: {training_file} or Testing file: {testing_file}" \
                     "is not present"
                 raise Exception(message)
+            
 
-                 
             return is_available
 
-        except Exception as e :
+        except Exception as e:
             raise HousingException(e,sys) from e
 
 
@@ -80,16 +84,21 @@ class DataValidation:
         except Exception as e:
             raise HousingException(e,sys) from e
 
+
     def get_and_save_data_drift_report(self):
         try:
-            profile = profile(section = [DataDriftProfileSection()])
+            profile = Profile(sections = [DataDriftProfileSection()])
 
             train_df, test_df = self.get_train_and_test_df()
 
-            profile.calcualte(train_df, test_df) #generates the datadrift report
+            profile.calculate(train_df, test_df) #generates the datadrift report
 
             #profile.json() ~ the report(output) in json fromat
             report = json.loads(profile.json()) #converts from json to list/dic
+
+            report_file_path = self.data_validation_config.report_file_path
+            report_dir = os.path.dirname(report_file_path)
+            os.makedirs(report_dir, exist_ok=True)
 
             with open(self.data_validation_config.report_file_path, "w") as report_file:
                 json.dump(report, report_file, indent=6)
@@ -103,8 +112,12 @@ class DataValidation:
             dashboard = Dashboard(tabs=[DataDriftTab()])
             train_df, test_df = self.get_train_and_test_df()
             dashboard.calculate(train_df, test_df)
-            dashboard.save(self.data_validation_config.report_page_file_path)
 
+            report_page_file_path = self.data_validation_config.report_page_file_path
+            report_page_dir = os.path.dirname(report_page_file_path)
+            os.makedirs(report_page_dir, exist_ok=True)
+
+            dashboard.save(self.data_validation_config.report_page_file_path)
         except Exception as e:
             raise HousingException(e,sys) from e
 
