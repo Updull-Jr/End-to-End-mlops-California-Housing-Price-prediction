@@ -111,7 +111,8 @@ class DataIngestion:
                 strat_test_set.to_csv(test_file_path,index=False)
             
 
-            data_ingestion_artifact = DataIngestionArtifact(train_file_path=train_file_path,
+            data_ingestion_artifact = DataIngestionArtifact(
+                                train_file_path=train_file_path,
                                 test_file_path=test_file_path,
                                 is_ingested=True,
                                 message=f"Data ingestion completed successfully."
