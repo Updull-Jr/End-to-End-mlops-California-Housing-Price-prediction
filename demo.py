@@ -1,28 +1,30 @@
 from housing.pipeline.pipeline import Pipeline
 from housing.exception import HousingException
 from housing.logger import logging
-from housing.config.configuration import Configuration
+from housing.config.configuration import Configuartion
 from housing.component.data_transformation import DataTransformation
-import os,sys
-
- 
+import os
 def main():
     try:
-        pipeline = Pipeline()
-        pipeline.run_pipeline()
-        #data_validation_config = Configuration().get_data_validation_config()
-        #print(data_validation_config)
-        #schema_file_path = r"C:\Users\HP\Desktop\ML PROJECTS\project006\config\schema.yaml"
-        #file_path = r"C:\Users\HP\Desktop\ML PROJECTS\project006\housing\artifact\data_ingestion\2022-11-21-01-32\ingested_data\train\housing.csv"
+        config_path = os.path.join("config","config.yaml")
+        pipeline = Pipeline(Configuartion(config_file_path=config_path))
+        #pipeline.run_pipeline()
+        pipeline.start()
+        logging.info("main function execution completed.")
+        # # data_validation_config = Configuartion().get_data_transformation_config()
+        # # print(data_validation_config)
+        # schema_file_path=r"D:\Project\machine_learning_project\config\schema.yaml"
+        # file_path=r"D:\Project\machine_learning_project\housing\artifact\data_ingestion\2022-06-27-19-13-17\ingested_data\train\housing.csv"
 
-        #df = DataTransformation.load_data(file_path=file_path, schema_file_path= schema_file_path)
-        #print(df.columns)
-        #print(df.dtypes)
+        # df= DataTransformation.load_data(file_path=file_path,schema_file_path=schema_file_path)
+        # print(df.columns)
+        # print(df.dtypes)
+
     except Exception as e:
-        logging.error(f"e")
+        logging.error(f"{e}")
         print(e)
-        raise HousingException(e,sys) from e 
 
-if __name__ == "__main__":
+
+
+if __name__=="__main__":
     main()
-

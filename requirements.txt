@@ -6,4 +6,5 @@ PyYAML
 scikit-learn
 evidently
 dill
+matplotlib
 -e .
